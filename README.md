@@ -3,6 +3,11 @@
 # 使用　python 3.6
 
 #1) 安装SDK
+
    pip install tencentcloud-sdk-python
+
 #2) demo
-   python process_audio.py　　　　　　　　　　　　　　　　　　　　　　　　
+
+   python process_audio.py　　　　　　　　　　　　　　　　　　　　　　　　i
+
+
