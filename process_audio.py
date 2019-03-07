@@ -85,43 +85,6 @@ def transmit_oral_process(sessionId, userVoiceData):  #  语音段唯一标识�
     except TencentCloudSDKException as err:
 	    print("%s" % err)
 
-def transmit_oral_process2(sessionId, userVoiceData):  #  语音段唯一标识，一个完整语音一个SessionId。
-    try:
-        # 实例化一个认证对象，入参需要传入腾讯云账户secretId，secretKey
-	    cred = credential.Credential(secretId, secretKey)
-
-	    # 实例化一个http选项，可选的，没有特殊需求可以跳过。
-	    httpProfile = HttpProfile()
-	    httpProfile.reqMethod = "POST"  # post请求(默认为post请求)
-	    httpProfile.reqTimeout = 30  # 请求超时时间，单位为秒(默认60秒)
-	    httpProfile.endpoint = "soe.tencentcloudapi.com"  # 指定接入地域域名(默认就近接入)
-	    
-	    clientProfile = ClientProfile()
-	    clientProfile.signMethod = "TC3-HMAC-SHA256"  # 指定签名算法(默认为HmacSHA256)
-	    clientProfile.unsignedPayload = True
-	    clientProfile.httpProfile = httpProfile
-
-	    client = soe_client.SoeClient(cred, "", clientProfile)
-	    req = models.TransmitOralProcessRequest()
-	    req.SessionId = sessionId
-	    req.VoiceFileType = 1  # 语音文件类型 1:raw, 2:wav, 3:mp3(三种格式目前仅支持16k采样率16bit编码单声道
-	    req.SeqId = 1           # 流式数据包的序号，从1开始，当IsEnd字段为1后后续序号无意义，当
-        #IsLongLifeSession不为1且为非流式模式时无意义。
-	    req.VoiceEncodeType = 1  # 语音编码类型 1:pcm。
-	    req.IsEnd = 0            #  是否传输完毕标志，若为0表示未完毕，若为1则传输完毕开始评估，非流式模式下无意义
-	
-	    req.UserVoiceData = userVoiceData  # 当前数据包数据, 流式模式下数据包大小可以按需设置，数据包大小必须 >= 4K，且必
-        #须保证分片帧完整（16bit的数据必须保证音频长度为偶数），编码格式要求为BASE64。
-
-	    # process
-	    resp = client.TransmitOralProcess(req)
-
-	    # 输出json格式的字符串回包
-	    print("%s" % resp.to_json_string())
-
-    except TencentCloudSDKException as err:
-	    print("%s" % err)
-    
 def process(text, audiofile):
    import librosa
    import base64 
